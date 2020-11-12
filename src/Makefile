@@ -1,5 +1,6 @@
 # Build caete_module
-F2PY = python3.8 -m numpy.f2py
+#F2PY = python3.8 -m numpy.f2py
+F2PY = poetry run python -m numpy.f2py
 MODNAME = caete_module
 INTERFACES = $(MODNAME).pyf
 CLEAN_DIR = ./clean_dir.sh
