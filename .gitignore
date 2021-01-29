@@ -6,7 +6,7 @@ src/__pycache__
 src/*.npy
 src/*.csv
 src/*.txt
-outputs/*
+src/outputs/*
 src/.python-version
 src/logfile.log
 input/.python-version
