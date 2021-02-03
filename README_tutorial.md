@@ -8,7 +8,7 @@ The code in this repository is based on an earlier version of CAETÊ that was no
 
 THis is part of my ongoing PhD research project.
 
-# For me to tun
+# For me to run
 
 Start poetry shell
 
