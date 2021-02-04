@@ -814,6 +814,7 @@ class grd:
                     c += 1
                 ton = self.sp_organic_n + self.sp_sorganic_n
                 top = self.sp_organic_p + self.sp_sorganic_p
+                
                 out = model.daily_budget(self.pls_table, self.wp_water_upper_mm, self.wp_water_lower_mm,
                                          self.soil_temp, temp[step], p_atm[step],
                                          ipar[step], ru[step], self.sp_available_n, self.sp_available_p,

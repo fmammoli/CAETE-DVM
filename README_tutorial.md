@@ -10,9 +10,160 @@ THis is part of my ongoing PhD research project.
 
 # For me to run
 
-Start poetry shell
+If you have just coloned this project you should:
 
+- Install pyhthon poetry
+
+The `project.toml` is a file describing the python dependencies for the project.
+The `poetry.lock` defines the exact versioning of each lib to avoid collisions.
+
+To install the dependencies just run.
+`poetry install`
+
+To start a python virtual environment with the libs you have just installed, simple run on the vscode terminal:
 `poetry shell`
+
+To exist the (.venv) shell just type `exit` on the terminal.
+
+While inside the `(.venv)` shell you can run python commands using `poetry run python _python_file_.py`
+
+# Configuring Fortran Debug
+
+To debug fortran code in fscode, with breakpoint you will need `gdb`, the `Modern Fortran` vscode extension,the `Fortran Breakpoint` vscode extension, and `C/C++` vscode extintion.
+You can find all of them in the vscode extention marketplace
+
+Make sure to install them all before continuing.
+
+After that you need to create a vscode task to compile your fortran code, you can use this as an example:
+Create a file named `tasks.json` insede your `.vscode` folder:
+
+```json
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "make debug",
+      "type": "shell",
+      "command": "make debug",
+      "options": {
+        "cwd": "${workspaceRoot}/src"
+      }
+    }
+  ]
+}
+```
+
+This task simply runs the `make debug` inside the Makefile when it is called. The `make debug` compiles all fortran files, creates a
+
+Then, you need to configure how the vscode debugger will be lounched.
+For that open you `launch.json` inside you `.vscode` folder and add the following:
+
+```json
+{
+  "name": "Debug Fortran",
+  "type": "cppdbg",
+  "request": "launch",
+  "program": "${workspaceRoot}/src/run_debug",
+  "args": [],
+  "stopAtEntry": false,
+  "cwd": "${workspaceRoot}",
+  "externalConsole": false,
+  //If you are using linux you are probably already have gdb
+  "MIMode": "gdb",
+
+  //If you are using macOS you probably have lldb, which is worst than gdb
+  //"MIMode": "lldb",
+  //"miDebuggerPath": "/usr/bin/lldb",
+
+  "preLaunchTask": "make debug"
+  // "logging": {
+  //   "trace": true,
+  //   "traceResponse": true,
+  //   "engineLogging": true
+  // }
+}
+```
+
+If you are using linux, you have `gdb` so you don need to change anything in the code above.
+What this configuration does is: it run the `make debug` task we have previously in our `tasks.json` file runs the `run_debug` file, that is inside the `/src` folder, in the vscode debugger interface.
+
+With that you can set breakpoints in your fortran code, check stacktraces and variables values.
+
+Since `caete_module` is compiled as a library and not a program, you will need to make a program that calls specific subroutines in the `caete_module` file. For an example of how to do it check them check the `debug_caete.f90` file, inside the `/src` folder.
+
+# Debugging Mixed Python and Fortran code
+
+I am still working on a mixing debuggin solutiion. I haven't managed to make it work in anyway and I don't think it has any simple solution. Solutions I have found use paid debugger aplication or a paid IDE, such as the Microsoft Visual Studio or the ARM debugger.
+
+I think it is probably an f2py limitation.
+I tried to run the model_drive.py using the Python debugger and while it is on pause I attached `lldb` to the python process running the `model_driver.py`. I added a breakpoint to the `budget.f90`it does not pause on it. I am not sure if there is a reasonable solution to that.
+
+If anyone has an idea, please tell me.
+This is the best post I found about it:
+(https://nadiah.org/2020/03/01/example-debug-mixed-python-c-in-visual-studio-code/)[https://nadiah.org/2020/03/01/example-debug-mixed-python-c-in-visual-studio-code/]
+
+# A very minimun git cheatsheet
+
+These are some very basic git command in case you have forgotten them.
+
+To clone a repository to your computer:
+`git clone link_to_the_repository_`
+
+To link all your branches:
+`git branch`
+
+The `*` will show which branch you are currently on.
+
+To create a new branch: (avoid using spaces, git does not deal well with it, so use - or \_ between words)
+`git branch my_branch`
+
+After you crate a branch you probably want to move to it, to do it just type:
+`git checkout my_branch`
+
+Now you are in your new branch.
+
+Then you changes some lines, to see what files have been changed:
+
+`git status`
+
+You realised you did not liked the changes you made to one specific, and you want to go back to the original file. You can just do: (Pay attention to the double slashes before the name of the file!!!)
+`git checkout --the_file_you_messed_up`
+
+I another file, you have changed some stuff and you liked it! and now you want to commit it. Simply do:
+
+`git add the_name_of_the_file_that_you_changed`
+
+To all all the files you have changes you can simply:
+
+`git add .`
+
+This is dangerous, try to avoid it. It is much better to add file by file.
+
+Now you have added all your amazing changes and you can commit them to your branch.
+Before commiting it is always useful to double check the branch you are in with `git branch`, you don't want to commit stuff in the wrong branch.
+
+Now that you are sure you are in the right branch, you can commit by doing:
+`git commit -m "you message"`
+It is good practice to write a good short description of you change, and remember that the text must be inside the double quotes " ".
+
+You realized you commits were great and you want to add it to you master. The best way to do it is to make a pull request. For that you just need to push your personal branch to github. Simply do it like:
+`git push origin my_branch`
+
+Now you can go to your gihub and open a pull request
+
+While you were working on you branch you realized that the master branch has been updated.
+I you want to update you master you must, move to the master branch and pull all the up updates from the remote master. You can do this by:
+`git checkout master` -> to move to the master branch
+`git pull origin master` -> this will get the most updated version of the master branch in add it to your local master branch.
+
+If you want to add the changes you just received on you master to your personal branch, you need to move back to your branch and merge your local master to your branch. This is a bit dangerous, so be careful:
+`git checkout my_branch` -> to move to the branch you created earlier
+`git merge master` -> this will apply the updated master branch to your branch
+
+To check the url of you `origin` you can simply:
+`git remote -v`
+
+An that is basically it.
 
 # Keeping your fork up to date
 

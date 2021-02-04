@@ -156,7 +156,10 @@ del stime
 
 
 if __name__ == "__main__":
-
+    # This line forces the mp module to use spawn method to create a new process.
+    # This is necessary to run in MacOC or windows, since in these systems the default
+    # method to create new process is spawn, and linux is fork.
+    mp.set_start_method('fork')
     output_path = Path("../outputs").resolve()
 
     if output_path.exists():
@@ -167,7 +170,7 @@ if __name__ == "__main__":
     import time
 
     n_proc = mp.cpu_count() // 2 if not sombrero else 55
-
+    n_proc = 1
     fh = open('logfile.log', mode='w')
 
     fh.writelines(time.ctime(),)
@@ -176,24 +179,33 @@ if __name__ == "__main__":
     start = time.time()
     print("SPINUP...")
 
-    with mp.Pool(processes=n_proc) as p:
-        result = p.map(apply_spin, grid_mn)
+    # with mp.Pool(processes=n_proc) as p:
+    #      result = p.map(apply_spin, grid_mn)
+  
+    #Trying to run on a single process
+    result = apply_spin(grid_mn[2])
     end_spinup = time.time() - start
     fh.writelines(f"END_OF_SPINUP after (s){end_spinup}\n",)
     del grid_mn
 
     fh.writelines("MODEL EXEC - MAIN SPINUP",)
     print("MODEL EXEC - spinup")
-    with mp.Pool(processes=n_proc) as p:
-        result1 = p.map(apply_fun, result)
+    # with mp.Pool(processes=n_proc) as p:
+    #     result1 = p.map(apply_fun, result)
+  
+    #Trying to run on a single process
+    result1 = apply_fun(result)
     end_spinup = time.time() - start
     del result  # clean memory
     fh.writelines(f"MODEL EXEC - spinup deco END after (s){end_spinup}\n",)
 
     fh.writelines("MODEL EXEC - RUN\n",)
     print("MODEL EXEC - RUN")
-    with mp.Pool(processes=n_proc) as p:
-        result2 = p.map(apply_fun1, result1)
+    # with mp.Pool(processes=n_proc) as p:
+    #     result2 = p.map(apply_fun1, result1)
+    
+    #Trying to run on a single process
+    result2 = apply_fun1(result1)
     end_spinup = time.time() - start
     del result1
     fh.writelines(f"MODEL EXEC - spinup coup END after (s){end_spinup}\n",)

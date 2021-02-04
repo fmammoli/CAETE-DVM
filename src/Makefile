@@ -1,5 +1,5 @@
 # Build caete_module & debug programs
-PYEXEC = python
+PYEXEC = poetry run python
 F2PY = $(PYEXEC) -m numpy.f2py
 MODNAME = caete_module
 INTERFACES = $(MODNAME).pyf
@@ -22,20 +22,30 @@ EXT_FLAGS = -fno-unsafe-math-optimizations -frounding-math -fsignaling-nans
 sources = global.f90 funcs.f90 soil_dec.f90 cc.f90 allocation.f90 productivity.f90 budget.f90
 
 # Objects for compilation in debug mode
-objects = global.o funcs.o soil_dec.o cc.o allocation.o productivity.o budget.o debug_caete.o
+objects = global.o funcs.o soil_dec.o cc.o allocation.o productivity.o budget.o #debug_caete.o
+
 
 # Build the interface and the shared object (caete_module) from .F90 source
 interface: $(sources)
-	$(F2PY) $(HFLAG) $(INTERFACES) $(sources) $(MFLAG) $(MODNAME) $(OVRTFLAG) --quiet
+	echo "Running interface"
+	$(F2PY) $(HFLAG) --debug  $(INTERFACES) $(sources) $(MFLAG) --debug-capi $(MODNAME) $(OVRTFLAG) --quiet
 
 so: $(sources) interface
-	$(F2PY)  $(INTERFACES) $(CFLAG) $(sources) --f90flags="-Wall $(EXT_FLAGS) -fopenmp " -lgomp
+	echo "Running so"
+	$(F2PY)  $(INTERFACES) $(CFLAG) --debug $(sources) --f90flags="-g -Wall $(EXT_FLAGS) -fopenmp " -lgomp
 	echo
 
 # Build objects for DEBUG mode
+
+test: $(objects)
+	$(F2PY) -c -m caete_module $(sources)
+
 debug: $(objects) so
 	$(PYEXEC) create_plsbin.py
 	$(FC) -o $(DEBUG_PROGRAM) $(FCFLAGS) $(objects)
+
+# The dependencie orders for the debug to run
+compile_all: $(objects)
 
 global.o: global.f90
 	$(FC) $(FLFLAGS) global.f90
@@ -94,7 +104,7 @@ debug_caete.o: debug_caete.f90
 
 # CLEAN DIR
 clean:
-	rm -rf test *.mod *.s *.o pls_ex.txt __pycache__ run_debug
+	rm -rf test *.mod *.s *.o pls_ex.txt __pycache__ run_debug run_debug2 a.out
 	$(CLEAN_DIR)
 	clear
 
