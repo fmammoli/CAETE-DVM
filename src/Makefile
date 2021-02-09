@@ -32,7 +32,7 @@ interface: $(sources)
 
 so: $(sources) interface
 	echo "Running so"
-	$(F2PY)  $(INTERFACES) $(CFLAG) --debug $(sources) --f90flags="-g -Wall $(EXT_FLAGS) -fopenmp " -lgomp
+	$(F2PY)  $(INTERFACES) $(CFLAG) --debug --debug-capi  $(sources) --f90flags="${FCFLAGS} -Wall $(EXT_FLAGS) -fopenmp " -lgomp
 	echo
 
 # Build objects for DEBUG mode

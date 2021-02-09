@@ -29,7 +29,7 @@ While inside the `(.venv)` shell you can run python commands using `poetry run p
 
 # Configuring Fortran Debug
 
-To debug fortran code in fscode, with breakpoint you will need `gdb`, the `Modern Fortran` vscode extension,the `Fortran Breakpoint` vscode extension, and `C/C++` vscode extintion.
+To debug fortran code in fscode with breakpoint you will need `gdb`, the `Modern Fortran` vscode extension,the `Fortran Breakpoint Support` vscode extension, and `C/C++` vscode extintion.
 You can find all of them in the vscode extention marketplace
 
 Make sure to install them all before continuing.
@@ -53,7 +53,7 @@ Create a file named `tasks.json` insede your `.vscode` folder:
 }
 ```
 
-This task simply runs the `make debug` inside the Makefile when it is called. The `make debug` compiles all fortran files, creates a
+This task simply runs the `make debug` inside the Makefile. The `make debug` compiles all fortran files compiles all the fortran code into a library to be used in another fortran program, it compiles using `gfortran` instead of F2PY. Since the fortran modules are compiled into a library, they can be tested using another fortran program, such as the `debug_caete.f90`.
 
 Then, you need to configure how the vscode debugger will be lounched.
 For that open you `launch.json` inside you `.vscode` folder and add the following:
@@ -84,23 +84,42 @@ For that open you `launch.json` inside you `.vscode` folder and add the followin
 }
 ```
 
-If you are using linux, you have `gdb` so you don need to change anything in the code above.
-What this configuration does is: it run the `make debug` task we have previously in our `tasks.json` file runs the `run_debug` file, that is inside the `/src` folder, in the vscode debugger interface.
+If you are using linux you already have `gdb`, so you don need to change anything in the code above.
+What this configuration does is: it run the `make debug` task we have previously configured in our `tasks.json` file and then runs the `run_debug.f90` file that is inside the `/src` folder, in the vscode debugger interface.
 
-With that you can set breakpoints in your fortran code, check stacktraces and variables values.
+With that you can set breakpoints in your fortran code, check stacktraces and variables values using the vscode debug interface.
 
 Since `caete_module` is compiled as a library and not a program, you will need to make a program that calls specific subroutines in the `caete_module` file. For an example of how to do it check them check the `debug_caete.f90` file, inside the `/src` folder.
 
 # Debugging Mixed Python and Fortran code
 
-I am still working on a mixing debuggin solutiion. I haven't managed to make it work in anyway and I don't think it has any simple solution. Solutions I have found use paid debugger aplication or a paid IDE, such as the Microsoft Visual Studio or the ARM debugger.
+I am still working on a mixing debuggin solution.
+
+I haven't managed to make it work in anyway and I don't think it has any simple solution. Solutions I have found use paid debugger aplication or a paid IDE, such as the Microsoft Visual Studio or the ARM debugger.
 
 I think it is probably an f2py limitation.
 I tried to run the model_drive.py using the Python debugger and while it is on pause I attached `lldb` to the python process running the `model_driver.py`. I added a breakpoint to the `budget.f90`it does not pause on it. I am not sure if there is a reasonable solution to that.
 
+I can compile the fortran code with f2py using debug flags like so:
+
+```makefile
+interface: $(sources)
+	echo "Running interface"
+	$(F2PY) $(HFLAG) --debug  $(INTERFACES) $(sources) $(MFLAG) --debug-capi $(MODNAME) $(OVRTFLAG) --quiet
+
+so: $(sources) interface
+	echo "Running so"
+	$(F2PY)  $(INTERFACES) $(CFLAG) --debug --debug-capi  $(sources) --f90flags="${FCFLAGS} -Wall $(EXT_FLAGS) -fopenmp " -lgomp
+	echo
+
+```
+
+The best I got was: I run `model_driver.py` in the debugger with a breakpoint somewhere, when it stops I attach a lldb debugger to the python process. If I manually stop the fortran debugger it stops the code execution but only shows me some assembly code, not the fortran lines...not sure what to do.
+
 If anyone has an idea, please tell me.
 This is the best post I found about it:
 (https://nadiah.org/2020/03/01/example-debug-mixed-python-c-in-visual-studio-code/)[https://nadiah.org/2020/03/01/example-debug-mixed-python-c-in-visual-studio-code/]
+https://stackoverflow.com/questions/8307425/eclipse-debug-shared-library-loaded-from-python
 
 # A very minimun git cheatsheet
 
