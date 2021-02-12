@@ -40,6 +40,18 @@ from caete_module import water as st
 from caete_module import photo as m
 from caete_module import soil_dec
 
+import debug_base
+# Debug option
+
+# Diga aqui qual step você quer debugar
+# Isso vai fazer com que, no step definido, uma função salve os valores
+# de todas as variaveis que serao enviadas para o model.daily_budget no arquivo test_budget_values.
+# O arquvio formata todas as variaveis como inicializações do fortran. Você pode copiar o conteúdo do txt no arquivo debug_caete.f90
+# para inicializar as variáveis com valores reais.
+
+#A intervençcao e feita na linha 681
+DEBUG_STEP = [1,20,50]
+
 
 # GLOBAL
 out_ext = ".pkz"
@@ -815,6 +827,19 @@ class grd:
                 ton = self.sp_organic_n + self.sp_sorganic_n
                 top = self.sp_organic_p + self.sp_sorganic_p
                 
+                #### - Parte para DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                # Essa parte salva os dados em um arquivo txt no formato do fortra, util para usar no debug_caete.f90
+                ####
+                if step in DEBUG_STEP:
+                    array_to_debug = [self.pls_table, self.wfim, self.gfim, self.sfim,
+                                         self.soil_temp, temp[step], prec[step], p_atm[step],
+                                         ipar[step], ru[step], self.sp_available_n, self.sp_available_p,
+                                         ton, top, self.sp_organic_p, co2, sto, cleaf, cwood, croot, csap,
+                                         cheart, dcl, dca, dcf, uptk_costs]
+                    debug_base.save_step_values_to_txt(array_to_debug, step)
+                #### - Fim da parte para debug!!!!!!!!!!!!!!!!!!!!!!!!!!
+                
+
                 out = model.daily_budget(self.pls_table, self.wp_water_upper_mm, self.wp_water_lower_mm,
                                          self.soil_temp, temp[step], p_atm[step],
                                          ipar[step], ru[step], self.sp_available_n, self.sp_available_p,
