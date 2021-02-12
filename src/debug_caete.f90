@@ -47,45 +47,45 @@ program test_caete
       real(r_8),dimension(npls) :: dwood  ! k gm-2
       real(r_8),dimension(npls) :: uptk_costs ! g m-2
 
-      ! !# out
-      ! real(r_4) :: epavg          !Maximum evapotranspiration (mm/day)
-      ! real(r_8) :: smavg          !Snowmelt Daily average (mm/day)
-      ! real(r_8) :: ruavg          !Runoff Daily average (mm/day)
-      ! real(r_8) :: evavg          !Actual evapotranspiration Daily average (mm/day)
-      ! real(r_8) :: phavg          !Daily photosynthesis (Kg m-2 y-1)
-      ! real(r_8) :: aravg          !Daily autotrophic respiration (Kg m-2 y-1)
-      ! real(r_8) :: nppavg         !Daily NPP (average between PFTs)(Kg m-2 y-1)
-      ! real(r_8) :: laiavg         !Daily leaf area Index m2m-2
-      ! real(r_8) :: rcavg          !Daily canopy resistence s/m
-      ! real(r_8) :: f5avg          !Daily canopy resistence s/m
-      ! real(r_8) :: rmavg          !maintenance/growth respiration (Kg m-2 y-1)
-      ! real(r_8) :: rgavg          !maintenance/growth respiration (Kg m-2 y-1)
-      ! real(r_8) :: wueavg         ! Water use efficiency
-      ! real(r_8) :: cueavg         ! [0-1]
-      ! real(r_8) :: vcmax_1          ! µmol m-2 s-1
-      ! real(r_8) :: specific_la_1    ! m2 g(C)-1
-      ! real(r_8) :: c_defavg       ! kg(C) m-2 Carbon deficit due to negative NPP - i.e. ph < ar
-      ! real(r_8) :: litter_l_1       ! g m-2
-      ! real(r_8) :: cwd_1            ! g m-2
-      ! real(r_8) :: litter_fr_1      ! g m-2
-      ! real(r_8),dimension(2) :: nupt_1         ! g m-2 (1) from Soluble (2) from organic
-      ! real(r_8),dimension(3) :: pupt_1         ! g m-2
-      ! real(r_8),dimension(6) :: lit_nut_content_1 ! g(Nutrient)m-2 ! Lit_nut_content variables         [(lln),(rln),(cwdn),(llp),(rl),(cwdp)]
+      !# out
+      real(r_4) :: epavg          !Maximum evapotranspiration (mm/day)
+      real(r_8) :: smavg          !Snowmelt Daily average (mm/day)
+      real(r_8) :: ruavg          !Runoff Daily average (mm/day)
+      real(r_8) :: evavg          !Actual evapotranspiration Daily average (mm/day)
+      real(r_8) :: phavg          !Daily photosynthesis (Kg m-2 y-1)
+      real(r_8) :: aravg          !Daily autotrophic respiration (Kg m-2 y-1)
+      real(r_8) :: nppavg         !Daily NPP (average between PFTs)(Kg m-2 y-1)
+      real(r_8) :: laiavg         !Daily leaf area Index m2m-2
+      real(r_8) :: rcavg          !Daily canopy resistence s/m
+      real(r_8) :: f5avg          !Daily canopy resistence s/m
+      real(r_8) :: rmavg          !maintenance/growth respiration (Kg m-2 y-1)
+      real(r_8) :: rgavg          !maintenance/growth respiration (Kg m-2 y-1)
+      real(r_8) :: wueavg         ! Water use efficiency
+      real(r_8) :: cueavg         ! [0-1]
+      real(r_8) :: vcmax_1          ! µmol m-2 s-1
+      real(r_8) :: specific_la_1    ! m2 g(C)-1
+      real(r_8) :: c_defavg       ! kg(C) m-2 Carbon deficit due to negative NPP - i.e. ph < ar
+      real(r_8) :: litter_l_1       ! g m-2
+      real(r_8) :: cwd_1            ! g m-2
+      real(r_8) :: litter_fr_1      ! g m-2
+      real(r_8),dimension(2) :: nupt_1         ! g m-2 (1) from Soluble (2) from organic
+      real(r_8),dimension(3) :: pupt_1         ! g m-2
+      real(r_8),dimension(6) :: lit_nut_content_1 ! g(Nutrient)m-2 ! Lit_nut_content variables         [(lln),(rln),(cwdn),(llp),(rl),(cwdp)]
 
-      ! ! FULL OUTPUT
-      ! real(r_4),dimension(npls) :: w2             !Final (last day) soil moisture storage (mm)
-      ! real(r_4),dimension(npls) :: g2             !Final soil ice storage (mm)
-      ! real(r_4),dimension(npls) :: s2             !Final overland snow storage (mm)
-      ! real(r_8),dimension(npls) :: cleafavg_pft   !Carbon in plant tissues (kg m-2)
-      ! real(r_8),dimension(npls) :: cawoodavg_pft  !
-      ! real(r_8),dimension(npls) :: cfrootavg_pft  !
-      ! real(r_8),dimension(npls) :: ocpavg         ! [0-1] Gridcell occupation
-      ! real(r_8),dimension(3,npls) :: delta_cveg_1
-      ! real(r_8),dimension(3,npls) :: storage_out_bdgt_1
-      ! integer(i_2),dimension(3,npls) :: limitation_status_1
-      ! integer(i_4),dimension(2,npls) :: uptk_strat_1
-      ! real(r_8),dimension(npls) ::  npp2pay_1
-      ! real(r_8),dimension(3) :: wp, cp
+      ! FULL OUTPUT
+      real(r_4),dimension(npls) :: w2             !Final (last day) soil moisture storage (mm)
+      real(r_4),dimension(npls) :: g2             !Final soil ice storage (mm)
+      real(r_4),dimension(npls) :: s2             !Final overland snow storage (mm)
+      real(r_8),dimension(npls) :: cleafavg_pft   !Carbon in plant tissues (kg m-2)
+      real(r_8),dimension(npls) :: cawoodavg_pft  !
+      real(r_8),dimension(npls) :: cfrootavg_pft  !
+      real(r_8),dimension(npls) :: ocpavg         ! [0-1] Gridcell occupation
+      real(r_8),dimension(3,npls) :: delta_cveg_1
+      real(r_8),dimension(3,npls) :: storage_out_bdgt_1
+      integer(i_2),dimension(3,npls) :: limitation_status_1
+      integer(i_4),dimension(2,npls) :: uptk_strat_1
+      real(r_8),dimension(npls) ::  npp2pay_1
+      real(r_8),dimension(3) :: wp, cp
 
       integer(i_4) :: i,j
 
