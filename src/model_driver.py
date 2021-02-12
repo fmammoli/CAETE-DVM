@@ -179,62 +179,64 @@ if __name__ == "__main__":
     start = time.time()
     print("SPINUP...")
 
-    with mp.Pool(processes=n_proc) as p:
-        result = p.map(apply_spin, grid_mn)
-    end_spinup = time.time() - start
-    fh.writelines(f"END_OF_SPINUP after (s){end_spinup}\n",)
-    del grid_mn
+    ## With multi proc
 
-    fh.writelines("MODEL EXEC - MAIN SPINUP",)
-    print("MODEL EXEC - spinup")
-    with mp.Pool(processes=n_proc) as p:
-        result1 = p.map(apply_fun, result)
-    end_spinup = time.time() - start
-    del result  # clean memory
-    fh.writelines(f"MODEL EXEC - spinup deco END after (s){end_spinup}\n",)
-
-    fh.writelines("MODEL EXEC - RUN\n",)
-    print("MODEL EXEC - RUN")
-    with mp.Pool(processes=n_proc) as p:
-        result2 = p.map(apply_fun1, result1)
-    end_spinup = time.time() - start
-    del result1
-    fh.writelines(f"MODEL EXEC - spinup coup END after (s){end_spinup}\n",)
-    fh.close()
-
-    
-    ## For single process run
     # with mp.Pool(processes=n_proc) as p:
-    #      result = p.map(apply_spin, grid_mn)
-  
-    #Trying to run on a single process
-    # result = apply_spin(grid_mn[2])
+    #     result = p.map(apply_spin, grid_mn)
     # end_spinup = time.time() - start
     # fh.writelines(f"END_OF_SPINUP after (s){end_spinup}\n",)
     # del grid_mn
 
     # fh.writelines("MODEL EXEC - MAIN SPINUP",)
     # print("MODEL EXEC - spinup")
-    # # with mp.Pool(processes=n_proc) as p:
-    # #     result1 = p.map(apply_fun, result)
-  
-    # #Trying to run on a single process
-    # result1 = apply_fun(result)
+    # with mp.Pool(processes=n_proc) as p:
+    #     result1 = p.map(apply_fun, result)
     # end_spinup = time.time() - start
     # del result  # clean memory
     # fh.writelines(f"MODEL EXEC - spinup deco END after (s){end_spinup}\n",)
 
     # fh.writelines("MODEL EXEC - RUN\n",)
     # print("MODEL EXEC - RUN")
-    # # with mp.Pool(processes=n_proc) as p:
-    # #     result2 = p.map(apply_fun1, result1)
-    
-    # #Trying to run on a single process
-    # result2 = apply_fun1(result1)
+    # with mp.Pool(processes=n_proc) as p:
+    #     result2 = p.map(apply_fun1, result1)
     # end_spinup = time.time() - start
     # del result1
     # fh.writelines(f"MODEL EXEC - spinup coup END after (s){end_spinup}\n",)
     # fh.close()
+
+    
+    # For single process run
+    with mp.Pool(processes=n_proc) as p:
+         result = p.map(apply_spin, grid_mn)
+  
+    ### Trying to run on a single process
+    result = apply_spin(grid_mn[0])
+    end_spinup = time.time() - start
+    fh.writelines(f"END_OF_SPINUP after (s){end_spinup}\n",)
+    del grid_mn
+
+    fh.writelines("MODEL EXEC - MAIN SPINUP",)
+    print("MODEL EXEC - spinup")
+    # with mp.Pool(processes=n_proc) as p:
+    #     result1 = p.map(apply_fun, result)
+  
+    #Trying to run on a single process
+    result1 = apply_fun(result)
+    end_spinup = time.time() - start
+    del result  # clean memory
+    fh.writelines(f"MODEL EXEC - spinup deco END after (s){end_spinup}\n",)
+
+    fh.writelines("MODEL EXEC - RUN\n",)
+    print("MODEL EXEC - RUN")
+    # with mp.Pool(processes=n_proc) as p:
+    #     result2 = p.map(apply_fun1, result1)
+    
+    #Trying to run on a single process
+    result2 = apply_fun1(result1)
+    end_spinup = time.time() - start
+    del result1
+    fh.writelines(f"MODEL EXEC - spinup coup END after (s){end_spinup}\n",)
+    fh.close()
 
 
     # a = apply_spin(grid_mn[2])

@@ -22,17 +22,21 @@ EXT_FLAGS = -fno-unsafe-math-optimizations -frounding-math -fsignaling-nans
 sources = global.f90 funcs.f90 soil_dec.f90 cc.f90 allocation.f90 productivity.f90 budget.f90
 
 # Objects for compilation in debug mode
-objects = global.o funcs.o soil_dec.o cc.o allocation.o productivity.o budget.o #debug_caete.o
+objects = global.o funcs.o soil_dec.o cc.o allocation.o productivity.o budget.o debug_caete.o
 
 
 # Build the interface and the shared object (caete_module) from .F90 source
 interface: $(sources)
 	echo "Running interface"
-	$(F2PY) $(HFLAG) --debug  $(INTERFACES) $(sources) $(MFLAG) --debug-capi $(MODNAME) $(OVRTFLAG) --quiet
+	#with debug flags
+	#$(F2PY) $(HFLAG) $(INTERFACES) $(sources) $(MFLAG) --debug-capi $(MODNAME) $(OVRTFLAG) --quiet
+	$(F2PY) $(HFLAG) $(INTERFACES) $(sources) $(MFLAG) $(MODNAME) $(OVRTFLAG) --quiet
 
 so: $(sources) interface
 	echo "Running so"
-	$(F2PY)  $(INTERFACES) $(CFLAG) --debug --debug-capi  $(sources) --f90flags="${FCFLAGS} -Wall $(EXT_FLAGS) -fopenmp " -lgomp
+	# With debug flags
+	#$(F2PY)  $(INTERFACES) $(CFLAG) --debug --debug-capi  $(sources) --f90flags="${FCFLAGS} -Wall $(EXT_FLAGS) -fopenmp " -lgomp
+	$(F2PY)  $(INTERFACES) $(CFLAG) $(sources) --f90flags="-Wall $(EXT_FLAGS) -fopenmp " -lgomp
 	echo
 
 # Build objects for DEBUG mode

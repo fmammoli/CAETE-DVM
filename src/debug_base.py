@@ -86,7 +86,7 @@ def get_budget_call_from_python():
        file_string = f.read()
        f.close()
        call_matches = re.findall("out = model.daily_budget\([\w\.,$\s\[\]]*\)", file_string)
-       variable_list = call_matches.replace('out = model.daily_budget(','').replace('\n','').replace(' ','').replace(')','')
+       variable_list = call_matches[0].replace('out = model.daily_budget(','').replace('\n','').replace(' ','').replace(')','')
        
        variable_list_with_self_and_step = variable_list.split(',')
        variable_names_list = variable_list.replace('self.','').replace('[step]','').split(',')
@@ -103,9 +103,9 @@ def get_budget_definition_from_fortran():
 
 def build_relatable_params(python_params, fortran_params):
        both_params = []
-       if (len(python_params) == len(fortran_params)):
-              for i in len(python_params):
-                     both_params.append([python_params[i], fortran_params[i]])
+       
+       for i,o in enumerate(python_params):
+              both_params.append([python_params[i], fortran_params[i]])
        return both_params
 
 def save_step_values_to_txt(step_array, step):
