@@ -37,10 +37,11 @@ so: $(sources) interface
 
 # Build objects for DEBUG mode
 
-test: $(objects)
-	$(F2PY) -c -m caete_module $(sources)
-
 debug: $(objects) so
+	$(FC) -o $(DEBUG_PROGRAM) $(FCFLAGS) $(objects)
+
+# Joao debug
+debug1: $(objects) so
 	$(PYEXEC) create_plsbin.py
 	$(FC) -o $(DEBUG_PROGRAM) $(FCFLAGS) $(objects)
 

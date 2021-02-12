@@ -831,11 +831,11 @@ class grd:
                 # Essa parte salva os dados em um arquivo txt no formato do fortra, util para usar no debug_caete.f90
                 ####
                 if step in DEBUG_STEP:
-                    array_to_debug = [self.pls_table, self.wfim, self.gfim, self.sfim,
-                                         self.soil_temp, temp[step], prec[step], p_atm[step],
+                    array_to_debug = [self.pls_table, self.wp_water_upper_mm, self.wp_water_lower_mm,
+                                         self.soil_temp, temp[step], p_atm[step],
                                          ipar[step], ru[step], self.sp_available_n, self.sp_available_p,
-                                         ton, top, self.sp_organic_p, co2, sto, cleaf, cwood, croot, csap,
-                                         cheart, dcl, dca, dcf, uptk_costs]
+                                         ton, top, self.sp_organic_p, co2, sto, cleaf, cwood, croot,
+                                         dcl, dca, dcf, uptk_costs, self.wmax_mm]
                     debug_base.save_step_values_to_txt(array_to_debug, step)
                 #### - Fim da parte para debug!!!!!!!!!!!!!!!!!!!!!!!!!!
                 
