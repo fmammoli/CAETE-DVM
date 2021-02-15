@@ -1,8 +1,9 @@
 program test_caete
 
   ! ------------------------ !!!!! ATENCAO!!!! ------------------!
-  ! Nao delete esse arquivo!
-  ! Esse arquivo é a base para criar os testes da budget, os comentarios aqui sao importantes.
+  ! @@InsertOutputData@@
+
+  ! Esse arquivo foi criado automaticamente, os comentarios aqui sao importantes.
   ! Eles sao usados para o script debug_base.py saber como contruir o arquivo fortran debug_caete_stepX.f90.
   ! Por favor nao altere os comentarios.
 

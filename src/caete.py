@@ -50,7 +50,7 @@ import debug_base
 # para inicializar as variáveis com valores reais.
 
 #A intervençcao e feita na linha 681
-DEBUG_STEP = [1,20,50]
+DEBUG_STEP = [0,1,20,50]
 
 
 print(f"RUNNING CAETÊ with {gp.npls} Plant Life Strategies")
