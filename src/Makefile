@@ -32,6 +32,8 @@ so: $(sources) interface
 	$(F2PY)  $(INTERFACES) $(CFLAG) $(sources) --f90flags="-Wall $(EXT_FLAGS) -fopenmp " -lgomp
 	echo
 
+
+
 # Build objects for DEBUG mode
 debug: $(objects) so
 	$(PYEXEC) create_plsbin.py
