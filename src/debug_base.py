@@ -133,11 +133,8 @@ def build_fortran_variables_declaration(step=0):
        
        return template_string
 
-def save_step_values_to_txt(step_array, step):
+def save_call_to_debug(step_array, step):
        template_string_with_variables = build_fortran_variables_declaration()
-       f = open("../fortran_tests/test1.f90",'w')
-       print(template_string_with_variables, file=f)
-       f.close()
       
        fortran_budget_variable_list = get_budget_definition_from_fortran()
        python_budget_variable_list = get_budget_call_from_python()
@@ -173,8 +170,9 @@ def save_step_values_to_txt(step_array, step):
        call_daily_budget_string = f"call daily_budget({format_values(fortran_budget_variable_list, 4)})"
 
        complete_template = re.sub("(![ ]*@@InsertCallDailyBudget@@[ ]*)", call_daily_budget_string, template_string_with_variables_and_inicialization)
+       
        f = open(f"../fortran_tests/debug_caete_step_{step}.f90",'w')
-       print(complete_template,file=f)
+       print(complete_template, ile=f)
        f.close()
 
        print('Step saved in ')

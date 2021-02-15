@@ -905,7 +905,8 @@ class grd:
                 top = self.sp_organic_p + self.sp_sorganic_p
                 
                 #### - Parte para DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                # Essa parte salva os dados em um arquivo txt no formato do fortra, util para usar no debug_caete.f90
+                # Essa parte captura os dados que vão ser usados na budget em um step e 
+                # salva em um arquivo fortran para teste, dentro da pasta /fortra_tests
                 ####
                 if step in DEBUG_STEP:
                     array_to_debug = [self.pls_table, self.wp_water_upper_mm, self.wp_water_lower_mm,
@@ -913,7 +914,7 @@ class grd:
                                          ipar[step], ru[step], self.sp_available_n, self.sp_available_p,
                                          ton, top, self.sp_organic_p, co2, sto, cleaf, cwood, croot,
                                          dcl, dca, dcf, uptk_costs, self.wmax_mm]
-                    debug_base.save_step_values_to_txt(array_to_debug, step)
+                    debug_base.save_call_to_debug(array_to_debug, step)
                 #### - Fim da parte para debug!!!!!!!!!!!!!!!!!!!!!!!!!!
                 
 
