@@ -1,21 +1,18 @@
 program test_caete
-
+  
   ! ------------------------ !!!!! ATENCAO!!!! ------------------!
-  ! Nao delete esse arquivo!
-  ! Esse arquivo é a base para criar os testes da budget, os comentarios aqui sao importantes.
-  ! Eles sao usados para o script debug_base.py saber como contruir o arquivo fortran debug_caete_stepX.f90.
-  ! Por favor nao altere os comentarios.
-
+  ! Esse arquivo foi autogerado pelo debug_base.py utilizanado o test_budget_base.f90 como template.
+  
   ! Para fazer o seu debug você deve modificar a parte indicada como
   ! ! %%### ------ Your Analysis ----- %%### !
   ! Depois desse comentário você pode fazer o que quiser, printar variaveis ou qualquer outra coisa.
 
-  ! Para utilizar um desses arquivos para debugar a budget basta seguir os passos:
-  ! 1 - Mova o arquivo do Step que você quer debugar para dentro da pasta /src.
-  ! 2 - Você só pode ter 1 arquivo do tipo debug_caete_stepX.f90 na pasta src por vez, sendo X o numero de um step.
+  ! Para utilizar esse para debugar a budget basta seguir os passos:
+  ! 1 - Mova o arquivo para dentro da pasta /src.
+  ! 2 - Renomeie o arquivo para debug_caete.f90.
   ! 3 - Coloce os breakponits nas linhas que você quiser, dentro da budget, por exemplo.
   ! 4 - Na aba de Debug do VSCode rode o Debug fortran
-  ! 5 - Substitua o arquivo por outro debug_caete_stepX.f90 que esta dentro da pasta fortran_tests
+
 
     use types
     use global_par
