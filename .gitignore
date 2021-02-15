@@ -7,6 +7,10 @@ src/*.npy
 src/*.csv
 src/*.txt
 src/outputs/*
+src/RUN*
+outputs/*
+nc_outputs/*
+h5/*
 src/.python-version
 src/logfile.log
 input/.python-version
