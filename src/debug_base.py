@@ -5,8 +5,6 @@ import os
 
 ### TODO - make the relatable parameters a dynamic function, maybe a can digest the files as txt and parse them....that could work
 
-
-
 #Relação entre nome das variáveis do paython e o nome das variáveis recebidas pelo fortran budget.f90
 #A ordem das variáveis está conforme elas precisam estar para chamar a subrotina daily_budget
 #É um array onde cada elemento é um array de duas posições, 
@@ -85,18 +83,19 @@ def get_budget_call_from_python():
        f = open('caete.py','r')
        file_string = f.read()
        f.close()
-       call_matches = re.findall("out = model.daily_budget\([\w\.,$\s\[\]]*\)", file_string)
+       call_matches = re.findall(r"out = model.daily_budget\([\w\.,$\s\[\]]*\)", file_string)
        variable_list = call_matches[0].replace('out = model.daily_budget(','').replace('\n','').replace(' ','').replace(')','')
        
        variable_list_with_self_and_step = variable_list.split(',')
-       variable_names_list = variable_list.replace('self.','').replace('[step]','').split(',')
+       #variable_names_list = variable_list.replace('self.','').replace('[step]','').split(',')
+       
        return variable_list_with_self_and_step
 
 def get_budget_definition_from_fortran():
-       f = open('budget.f90')
+       f = open('budget.f90','r')
        file_string = f.read()
        f.close()
-       definition_matches = re.findall("subroutine daily_budget\([\w\s,&_]*\)", file_string)
+       definition_matches = re.findall(r"subroutine daily_budget\([\w\s,&_]*\)", file_string)
        variable_list = definition_matches[0].replace('subroutine daily_budget(','').replace(')','').replace('&','').replace('\n','').replace(' ','').split(',')
        
        return variable_list
@@ -108,15 +107,44 @@ def build_relatable_params(python_params, fortran_params):
               both_params.append([python_params[i], fortran_params[i]])
        return both_params
 
+
+def build_fortran_variables_declaration(step=0):
+       f = open('budget.f90','r')
+       budget_string = f.read()
+       f.close()
+       
+       input_variables_string = re.findall(r"![ -]*INPUTS[-]*([\n\s \w\(\),:\!-/\[\]µ<]*)![ -]*OUTPUTS[ -]*", budget_string)
+       output_variables_string = re.findall(r"![ -]*OUTPUTS[-]*([\n\s \w\(\),:\!-/\[\]µ<]*)![ -]*Internal Variables[ -]*", budget_string)
+       #now split and clean every entry, remvoe comment, remove intents
+       formatted_input_variables = input_variables_string[0].replace(',intent(in)',"")
+       formatted_output_variables = output_variables_string[0].replace(",intent(out)","")
+       
+       f = open('../fortran_tests/test_budget_base.f90','r')
+       template_string = f.read()
+       f.close()
+
+       template_string = re.sub("(![ ]*@@InsertInputData@@[ ]*)", formatted_input_variables, template_string)
+       template_string = re.sub("(![ ]*@@InsertOutputData@@[ ]*)", formatted_output_variables, template_string)
+       
+       # f = open("../fortran_tests/test1.f90",'w')
+       # print(template_string, file=f)
+       # f.close()
+       #print(template_string)
+       
+       return template_string
+
 def save_step_values_to_txt(step_array, step):
+       template_string_with_variables = build_fortran_variables_declaration()
+       f = open("../fortran_tests/test1.f90",'w')
+       print(template_string_with_variables, file=f)
+       f.close()
+      
        fortran_budget_variable_list = get_budget_definition_from_fortran()
        python_budget_variable_list = get_budget_call_from_python()
 
        relatable_parameters = build_relatable_params(python_budget_variable_list, fortran_budget_variable_list)
 
        formated_for_fortran = format_for_fortran(step_array, relatable_parameters)
-
-       
 
        if not os.path.exists('../fortran_tests'):
               os.makedirs('../fortran_tests')
@@ -131,8 +159,22 @@ def save_step_values_to_txt(step_array, step):
        for item in formated_for_fortran:
               print(item, file=f)
               print("\n", file=f)
-              print(item)
-              print("\n")
+              # print(item)
+              # print("\n")
 
        f.close()
+       
+       variable_initialization_string =''
+       for item in formated_for_fortran:
+              variable_initialization_string += item + "\n\n"
+       
+       template_string_with_variables_and_inicialization = re.sub("(![ ]*@@InsertVariableInitialization@@[ ]*)", variable_initialization_string, template_string_with_variables)
+
+       call_daily_budget_string = f"call daily_budget({format_values(fortran_budget_variable_list, 4)})"
+
+       complete_template = re.sub("(![ ]*@@InsertCallDailyBudget@@[ ]*)", call_daily_budget_string, template_string_with_variables_and_inicialization)
+       f = open(f"../fortran_tests/debug_caete_step_{step}.f90",'w')
+       print(complete_template,file=f)
+       f.close()
+
        print('Step saved in ')

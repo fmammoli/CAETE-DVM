@@ -14,3 +14,5 @@ run_debug
 .vscode
 .python-version
 outputs/*
+
+.DS_Store
