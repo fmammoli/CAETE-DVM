@@ -3,7 +3,6 @@ PYEXEC = poetry run python
 F2PY = $(PYEXEC) -m numpy.f2py
 MODNAME = caete_module
 INTERFACES = $(MODNAME).pyf
-CLEAN_DIR = ./clean_dir.sh
 DEBUG_PROGRAM = run_debug
 
 # RUN MODE FLAGS
@@ -114,8 +113,12 @@ debug_caete.o: debug_caete.f90
 
 # CLEAN DIR
 clean:
+<<<<<<< HEAD
 	rm -rf test *.mod *.s *.o pls_ex.txt __pycache__ run_debug run_debug2 a.out
 	$(CLEAN_DIR)
+=======
+	rm -rf test *.mod *.s *.o pls_ex.txt __pycache__ run_debug
+>>>>>>> cnp
 	clear
 
 clean_plsgen:

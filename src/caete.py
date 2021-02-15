@@ -53,6 +53,7 @@ import debug_base
 DEBUG_STEP = [1,20,50]
 
 
+print(f"RUNNING CAETÊ with {gp.npls} Plant Life Strategies")
 # GLOBAL
 out_ext = ".pkz"
 npls = gp.npls
