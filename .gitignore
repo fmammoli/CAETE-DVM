@@ -17,9 +17,6 @@ input/.python-version
 run_debug
 .vscode
 .python-version
-<<<<<<< HEAD
 outputs/*
 
-=======
->>>>>>> master
 .DS_Store
