@@ -13,3 +13,4 @@ input/.python-version
 run_debug
 .vscode
 .python-version
+.DS_Store
